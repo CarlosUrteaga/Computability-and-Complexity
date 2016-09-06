@@ -20,7 +20,7 @@ int main(int argc, char* argv[]){
 int regla(char *str){
 	int n;
 	int i;
-	n =100;
+	n =10;
 	time_t t;
 	/* Intializes random number generator */
 	int j;
