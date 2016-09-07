@@ -1,12 +1,12 @@
 import java.util.Random;
+import java.io.PrintWriter;
 import java.io.*;
-
 public class Tarea02 {
-	public static float[] arreXu;
-	public float intXu;
-	public static float[] arreXi;
-	public float intXi;
-	public static void main(String[] args) {
+	public static double[] arreXu;
+	public double intXu;
+	public static double[] arreXi;
+	public double intXi;
+	public static void main(String[] args) throws IOException{
 		Tarea02 tarea02 = new Tarea02();
 		String str;
 		int N, M, O;
@@ -20,27 +20,22 @@ public class Tarea02 {
 			O=Integer.parseInt(args[2]);
 		}
 
-		arreXu = new float[N];
-		arreXi = new float[N];
-		float x =tarea02.fltProducciones(M,N, O);
-		System.out.println(x);
+		arreXu = new double[N];
+		arreXi = new double[N];
+		double x =tarea02.fltProducciones(M,N, O);
+		//System.out.println(x);
 		//int algostr = tarea02.intRegla(N,str);
 	}
 
-	public	float fltProducciones(int M, int N, int O){
+	public	double fltProducciones(int M, int N, int O)  throws IOException {
 		int i,j;
-		float fltPromedio=0;
+		double fltPromedio=0;
 		i=0;
-		//PrintWriter writer; = new PrintWriter("the-file-name.txt", "UTF-8");
-		try {
-		File file = new File("filename.txt");
-		if (!file.exists()) {
-				file.createNewFile();
-			}
-			while(i < N){
+
+		PrintWriter writer = new PrintWriter("file.txt", "UTF-8");
+		while(i < N){
 			arreXu[i]=fltTeorema(N, O);
 			fltPromedio+=arreXu[i];
-			writer.println(""+arreXu[i]);
 			//System.out.println("long " + arreXm[i]);
 			//System.out.println("prom " + arreXm[i]/O);
 
@@ -48,21 +43,37 @@ public class Tarea02 {
 			
 			i++;
 		}
-		//writer.close();
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-			// if file doesnt exists, then create it
-			
-		
 		intXu=fltPromedio/N;
+		i=0;
+		double arreAux[];
+		double fltSum=0;
+		arreAux = new double[N];
+
+		for(j = 0; j < N; j++){
+			arreAux[j] = Math.pow((arreXu[j]-intXu),2);
+			fltSum+=arreAux[j];
+		}
+		fltSum = Math.sqrt(fltSum/(N));
+		//System.out.println(fltSum);
+		while(i < N){
+			//System.out.println("arreXu " + arreXu[i]);
+			//System.out.println("fltPromedio " + intXu);
+			arreXu[i]=(arreXu[i]-intXu)/ fltSum;
+			//System.out.println("long " + arreXm[i]);
+			//System.out.println("prom " + arreXm[i]/O);
+
+			writer.println(""+arreXu[i]);
+			
+			i++;
+		}
+		writer.close();
 		return intXu;
 	}
-	public float fltTeorema(int N, int O){
+	public double fltTeorema(int N, int O){
 		int i,j;
-		float fltPromedio=0;
-		arreXi = new float[N];
+		double fltPromedio=0;
+		arreXi = new double[N];
 		i=0;
 		while(i < N){
 			arreXi[i]=intRegla(O,"MI");

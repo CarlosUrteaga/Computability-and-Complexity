@@ -9,18 +9,68 @@ int regla(char *str);
 int main(int argc, char* argv[]){
 	char str[999999]="MI";
 	printf("%s\n", str);
-	
+	strcat(str, "I");
+	strcat(str, "I");
+	strcat(str, "I");
+	printf("%s\n", str);
+	int i =0;
+	bool boolFlag=false;
+	//
+	//
+	char aux[999999]="M"; //set the start of the new array
+	// we know that str[0] is M
+					int idx =1; 
+					// aux of Is
+					int cntI; 
+					char auxI[4]=""; 
+					//while length of str
+					while (idx < strlen(str)){
+						//ask for Is
+						if (str[idx]=='I'){ 
+							cntI++;				
+							strcat(auxI, "I");
+							if (cntI==3){
+								strcat(aux, "U");
+							 	strncpy(auxI,"",1);
+							 	cntI=0;
+							 	if (!boolFlag)
+							 	{
+							 		boolFlag=true;
+							 	}
+							}
+						}else{
+							//if (str[idx]=='U')	{
+							 strcat(aux, auxI);
+							 strcat(aux, "U");
+							 strncpy(auxI,"",1);
+							 cntI=0;
+							 	
+							 //}
+						}
+						//printf("%i\n", idx);
+						idx++;
+					}
+					strcat(aux, auxI);
+					strncpy(str,"",1);
+					strncpy(str, aux, strlen(aux));
+					str[strlen(aux)] = '\0';
+					if (boolFlag)
+					{
+						i++;
+						//intSize[i]=strlen(str);
+					}
 	//printf("%s\n", aux);
-	regla(str);
+	//regla(str);
 	printf("%s\n", str);
 	return(0);
 
 }
 
 int regla(char *str){
+	int intSize[5];
 	int n;
 	int i;
-	n =10;
+	n =5;
 	time_t t;
 	/* Intializes random number generator */
 	int j;
@@ -28,16 +78,18 @@ int regla(char *str){
 	i=0;
 	while (i< n){
 		j = rand() % 4;
+		printf("========\n");
+		printf("turno\t%i\n", i);
 		printf("regla:\t\t%i\n", j+1);
 		printf("longitud:\t%i\n", strlen(str));
-		printf("turno\t%i\n", i);
-		//printf("%s\t\n", str);
+		printf("%s\t\n", str);
 
 		if (j==0){
 			//printf("Regla 1\n");
 			//printf("%i\n", strlen(str));
 			if (str[strlen(str)-1]=='I'){
 				strcat(str, "U");
+				intSize[i]=strlen(str);
 				i++;
 			}
 		}else{
@@ -47,6 +99,7 @@ int regla(char *str){
 				char tmp[999999]="";
 				strncpy(tmp, &str[1], strlen(str));
 				strcat(str, tmp);
+				intSize[i]=strlen(str);
 				i++;
 			}else{
 				if (j==2){
@@ -93,6 +146,7 @@ int regla(char *str){
 					if (boolFlag)
 					{
 						i++;
+						intSize[i]=strlen(str);
 					}
 				}else{
 					//printf("Regla 4\n");
@@ -126,6 +180,7 @@ int regla(char *str){
 						}
 						//printf("%i\n", idx);
 						idx++;
+				intSize[i]=strlen(str);
 					}
 					strcat(aux, auxU);
 					strncpy(str,"",1);
@@ -134,6 +189,7 @@ int regla(char *str){
 					if (boolFlag)
 					{
 						i++;
+				intSize[i]=strlen(str);
 					}
 
 
@@ -142,4 +198,5 @@ int regla(char *str){
 		}
 		
 	}
+	return intSize[n]/n;
 }
