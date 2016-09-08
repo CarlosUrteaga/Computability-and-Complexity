@@ -1,6 +1,8 @@
 import java.util.Random;
 import java.io.PrintWriter;
 import java.io.*;
+import java.util.Arrays;
+
 public class Tarea02 {
 	public static double[] arreXu;
 	public double intXu;
@@ -40,34 +42,84 @@ public class Tarea02 {
 			//System.out.println("prom " + arreXm[i]/O);
 
 			//writer.println(""+arreXu[i]);
-			
 			i++;
 		}
-
+		//se aregla
+		Arrays.sort(arreXu);
+		/*
+			Normalización y estandarización
+		*/
 		intXu=fltPromedio/N;
 		i=0;
 		double arreAux[];
 		double fltSum=0;
 		arreAux = new double[N];
-
 		for(j = 0; j < N; j++){
 			arreAux[j] = Math.pow((arreXu[j]-intXu),2);
 			fltSum+=arreAux[j];
 		}
 		fltSum = Math.sqrt(fltSum/(N));
 		//System.out.println(fltSum);
+
+		
 		while(i < N){
 			//System.out.println("arreXu " + arreXu[i]);
 			//System.out.println("fltPromedio " + intXu);
 			arreXu[i]=(arreXu[i]-intXu)/ fltSum;
 			//System.out.println("long " + arreXm[i]);
 			//System.out.println("prom " + arreXm[i]/O);
-
 			writer.println(""+arreXu[i]);
-			
 			i++;
 		}
 		writer.close();
+		//\mu
+		double sum=0;
+		double stdD=0;
+		for (int k = 0; k < N; k++) {
+        sum += arreXu[k];
+        stdD += Math.pow(arreXu[k], 2);
+    	}
+
+    	System.out.println(sum/N);
+    	double variance = stdD/N;
+
+    	System.out.println(variance);
+
+    	/*
+    	 * normal
+    	*/
+    	writer = new PrintWriter("file2.txt", "UTF-8");
+    	Random r = new Random();
+
+		double arreAuxNormal[];
+		double normal=0;
+		arreAuxNormal = new double[N];
+
+    	for (int k=0; k< N; k++) {
+    		arreAuxNormal[k]=r.nextGaussian();
+    		writer.println(""+arreAuxNormal[k]);
+    	}
+
+		writer.close();
+
+		/*
+			deciiles
+		
+		writer.println("===");
+		float intArray[];
+		int intDecilSize=10;
+		intArray = new float[intDecilSize];
+		double fltTmp;
+		for (int k =0; k < intDecilSize; k++) {
+			fltTmp = 1/10;
+			//System.out.println(1/10);
+
+			//System.out.println(String.format("%.12f", fltTmp));
+			intArray[k]=N*(k/intDecilSize);
+			writer.println(""+intArray[k]);
+		}
+		*/
+
 		return intXu;
 	}
 	public double fltTeorema(int N, int O){
