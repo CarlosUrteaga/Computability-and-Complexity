@@ -2,7 +2,7 @@
 import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
 theta=[]
-with open("file2.txt") as f:
+with open("file.txt") as f:
     for line in f:
         theta.append(float(line))
 
