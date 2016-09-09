@@ -290,7 +290,8 @@ public class Tarea02 {
 					if (str.indexOf("III")>0) {
 						//System.out.println("soy 3");
 						//System.out.println(str);
-						str= str.replaceAll("III", "U");
+						//str= str.replaceAll("III", "U");
+						str.replace("III","U");//replace
 						//System.out.println(str);
 						//System.out.println(str);
 						i++;
