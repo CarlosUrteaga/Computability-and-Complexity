@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.Arrays;
 
 public class Proyecto01 {
-	public static String[] strTabla;
+    public static String[] strTabla;
     public static void main(String[] args) {
         
         int intSeed;
@@ -21,10 +21,10 @@ public class Proyecto01 {
 
         strTabla = new String[64];
         tst.mtStates(intSeed);
-    	//Imprime estdos
+        //Imprime estdos
         //for (i=0;i < 64 ;i++ ) {
-    	//	System.out.println(i+"\t"+strTabla[i]);
-    	//}
+        //  System.out.println(i+"\t"+strTabla[i]);
+        //}
             
         strTest = tst.setTape(intSizeTape);
         strStB = tst.strToBin(strText);
@@ -39,24 +39,37 @@ public class Proyecto01 {
 
     }
     //primeros 6 bits estado siguiente, 7 bit escribe, 8 LR
-    public void mtStates(int intSeed){
-    	int intRandom;
-    	int i;
-    	int j;
-    	i =0;
-    	j=0;
-		Random r = new Random();
+    public void mtSetStates(int intSeed){
+        int intRandom;
+        int i;
+        int j;
+        i =0;
+        j=0;
+        Random r = new Random();
         r.setSeed(intSeed );
-		String strTemp="";
-    	for (i=0;i < 64 ;i++ ) {
-    		for (j=0;j<16 ;j++ ) {
-    			strTemp=strTemp+""+r.nextInt(2);
-    		}
-    		strTabla[i]=strTemp; 
-    		strTemp="";
-    	}
+        String strTemp="";
+        for (i=0;i < 64 ;i++ ) {
+            for (j=0;j<16 ;j++ ) {
+                strTemp=strTemp+""+r.nextInt(2);
+            }
+            strTabla[i]=strTemp; 
+            strTemp="";
+        }
 
     }
+    /*
+    Pendientes
+        - Método que simule una máquina de turing (posición, escritura, movimiento, siguiente estado)
+        - Simulación de los estados de una máquina de Turing
+        - Funciones de evaluación
+            Distancia por byte, por letra o por pareja o por como
+        -Algoritmo genético
+            - evaluación
+            - ordenación
+            - cruzamiento
+            - mutación
+            
+    */
     public String setTape(int intTamanioSCinta){
         String strCinta="";
         int i;
@@ -82,6 +95,23 @@ public class Proyecto01 {
         strTape= String.valueOf(charTape);
         return strTape;
     }
+    public String getStringTape(String strTape, String strText){
+        int intLengthTape;
+        int intLengthText;
+        int i;
+        char[] charTape = strTape.toCharArray();
+        char[] charText = strText.toCharArray();
+        intLengthTape = strTape.length();
+        intLengthText = strText.length();
+        
+
+        for (i=0; i<intLengthText; i++) {
+             charText[i] = charTape[intLengthTape/2 + i];
+        }
+
+        strText = String.valueOf(charText);  
+        return strText;
+    }
     public String strToBin(String strText){
         byte[] bytes = strText.getBytes();
         StringBuilder binary = new StringBuilder();
@@ -104,22 +134,5 @@ public class Proyecto01 {
             str += (char)(a);
         }
         return str;
-    }
-    public String getStringTape(String strTape, String strText){
-        int intLengthTape;
-        int intLengthText;
-        int i;
-        char[] charTape = strTape.toCharArray();
-        char[] charText = strText.toCharArray();
-        intLengthTape = strTape.length();
-        intLengthText = strText.length();
-        
-
-        for (i=0; i<intLengthText; i++) {
-             charText[i] = charTape[intLengthTape/2 + i];
-        }
-
-        strText = String.valueOf(charText);  
-        return strText;
     }
 }
