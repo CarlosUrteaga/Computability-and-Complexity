@@ -70,6 +70,7 @@ public class Proyecto01 {
             - mutación
             
     */
+    //Create a tape of size intTamanioSCinta 
     public String setTape(int intTamanioSCinta){
         String strCinta="";
         int i;
@@ -78,7 +79,7 @@ public class Proyecto01 {
         }
         return  strCinta;
     }/*char[]*/
-
+    //Add strText (must to be in binary) to Tape
     public String  modTape(String strTape, String strText){
         int intLengthTape;
         int intLengthText;
@@ -95,6 +96,7 @@ public class Proyecto01 {
         strTape= String.valueOf(charTape);
         return strTape;
     }
+    //get the "text" from tape
     public String getStringTape(String strTape, String strText){
         int intLengthTape;
         int intLengthText;
@@ -112,6 +114,8 @@ public class Proyecto01 {
         strText = String.valueOf(charText);  
         return strText;
     }
+
+    //convert a String to binary string
     public String strToBin(String strText){
         byte[] bytes = strText.getBytes();
         StringBuilder binary = new StringBuilder();
@@ -126,6 +130,7 @@ public class Proyecto01 {
         }
         return binary.toString();
     }
+    //binary string to char string
     public String binToStr(String strBin){
         String str = "";
         int i;
