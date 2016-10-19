@@ -27,11 +27,12 @@ public class Proyecto01 {
         double dblMutationProb;
         double dblPonderation;
         // Ask for configuration
-        System.out.println("Dame la raíz del generador de números aleatorios:");
-        intSeed = Integer.parseInt(System.console().readLine());
-        System.out.println("Deme el nombre del archivo que desee procesar:");
-        input = System.console().readLine();
-
+        //System.out.println("Dame la raíz del generador de números aleatorios:");
+        //intSeed = Integer.parseInt(System.console().readLine());
+        intSeed = 109152;
+        //System.out.println("Deme el nombre del archivo que desee procesar:");
+        //input = System.console().readLine();
+        input = "12345.txt";
         strText = "";
         try {
             Scanner scanner = new Scanner( new File(input), "UTF-8" );
@@ -40,7 +41,7 @@ public class Proyecto01 {
         } catch(FileNotFoundException fnfe) { 
             System.out.println(fnfe.getMessage());
         } 
-
+        /*
         System.out.print("1) Numero de individuos:\t");
         intSizePopulation = Integer.parseInt(System.console().readLine());
         System.out.print("2) Numero de transiciones:\t");
@@ -53,13 +54,15 @@ public class Proyecto01 {
         intGeneration = Integer.parseInt(System.console().readLine());
         System.out.print("6) Factor de Ponderación:\t");        
         dblPonderation = Double.parseDouble(System.console().readLine());
-
-        
+        */
+        intSizePopulation =50;
+        intTransition = 50; //cuando cambias de estado, cuando l
+        intSizeTape = 10000;
+        dblMutationProb = 0.01;
+        dblPonderation = 0;
         Proyecto01 tst = new Proyecto01();
         TuringClass turingMachines[] = new TuringClass[intSizePopulation];
         
-
-
         Random r = new Random();
         r.setSeed(intSeed );
 
@@ -74,7 +77,12 @@ public class Proyecto01 {
             System.out.println(turingMachines[0].strMT[i]);
         }
 
-        //strMT = new String[64];
+        strMT = new String[64];
+        strMT = turingMachines[0].strMT;
+        System.out.println("=======");
+        String strTesttm;
+        strTesttm = tst.tmtoString(strMT);
+        System.out.println(strTesttm);
         //Imprime estdos
         //for (i=0;i < 64 ;i++ ) {
         //  System.out.println(i+"\t"+strMT[i]);
@@ -86,7 +94,12 @@ public class Proyecto01 {
         strStB = tst.strToBin(strText);
         //Crea una nueva cinta con el texto
         strTest = tst.modTape(strCinta, strStB);
-        
+        System.out.println("=======");
+        strMT = new String[64];
+        strMT = tst.stringToTM(strTesttm);
+        for (i=0; i<64; i++) {
+            System.out.println(turingMachines[0].strMT[i]);
+        }
         //System.out.println(strStB);
         /*
         System.out.println(strTest);
@@ -172,7 +185,16 @@ public class Proyecto01 {
         }
         return strCintaT;
     }
+    /*
+    *******************************************************************
+                            Genomic Algorithm
+    *******************************************************************
+    */
+    public void cruzamiento(TuringClass[] turingMachines){
+        String strTM;
+        strTM = this.tmtoString(turingMachines);
 
+    }
     /*
     *******************************************************************
                             Turing Machine
@@ -182,15 +204,15 @@ public class Proyecto01 {
     public String tmtoString(String[] strTM){
         String strResTM = "";
         int i;
-        for (i=0; i< intSizePopulation; i++) {
-            strResTM= ""+ strTM[i];
+        for (i=0; i< NUMBEROFSTATES; i++) {
+            strResTM= strResTM+ strTM[i];
         }
         return strResTM;
     }
     public String[] stringToTM(String strResTM){
         String[] strTM = new String[NUMBEROFSTATES];
         int  i;
-        for (i=0; i<intSizePopulation; i++) {
+        for (i=0; i<NUMBEROFSTATES; i++) {
             strTM[i] = strResTM.substring(16*i,16*(i+1));
         }
         return strTM;
