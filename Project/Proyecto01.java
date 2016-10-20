@@ -29,7 +29,7 @@ public class Proyecto01 {
         // Ask for configuration
         //System.out.println("Dame la raíz del generador de números aleatorios:");
         //intSeed = Integer.parseInt(System.console().readLine());
-        intSeed = 109152;
+        intSeed = 1234;
         //System.out.println("Deme el nombre del archivo que desee procesar:");
         //input = System.console().readLine();
         input = "12345.txt";
@@ -67,6 +67,7 @@ public class Proyecto01 {
         r.setSeed(intSeed );
 
         int j;
+        /*
         //genera n maquinas de turing
         for (j = 0; j< intSizePopulation; j++) {
             turingMachines[j] = new TuringClass();
@@ -101,13 +102,26 @@ public class Proyecto01 {
             System.out.println(turingMachines[0].strMT[i]);
         }
         //System.out.println(strStB);
-        /*
+
         System.out.println(strTest);
         System.out.println(tst.simulationMT(tst2[0].strMT, strCinta, 0, algo));
         System.out.println("estado \t"+ tst2[0].strMT[0]);
         System.out.println(strTest);
+        // Se hace el cruzamiento
+        String strParte = "01234567";
+        String strParte02 = "00001111";
+        String strResCGA[] = new String[2];
+        strResCGA =  tst.crossGA(strParte, strParte02, .1,  r);
+        System.out.println(strResCGA[0]);
+        System.out.println(strResCGA[1]);
+        //* /
+        System.out.println(tst.mutationGA("000000000", .9, r));
+        System.out.println(tst.mutationGA("000000000", .9, r));
+        System.out.println(tst.mutationGA("000000000", .9, r));
+        System.out.println(tst.mutationGA("000000000", .9, r));
+        System.out.println(tst.mutationGA("000000000", .9, r));
+        System.out.println(tst.mutationGA("000000000", .9, r));
         //*/
-        
     }
     /*
     Pendientes
@@ -115,13 +129,24 @@ public class Proyecto01 {
         (done) Simulación de los estados de una máquina de Turing
         (done) Funciones de evaluación
             Distancia por byte, por letra o por pareja o por como
-
-        -Algoritmo genético
-
-
-            - cruzamiento
-            - mutación
+        
+        (done)Algoritmo genético
+            (done) cruzamiento
+            (done) mutación
+            (done) fitness
+        - Complejidad de Kolmgorov
+        - Integar
+            genera 50 MT
+            Evaluar
+            Ordena
+            Cruza
+            muta (repet) until n iteraciones o n estados
+        - Generar Salias de acuerdo a Kuri
             
+    */
+    /*
+        Proyecto
+            generar varias MT y evaluar,
     */
     public void projectProblem(TuringClass[] turingMachines, String strTargetText){
 
@@ -131,7 +156,7 @@ public class Proyecto01 {
         double dblFitness[] = new double[intSizePopulation];
         for (i=0; i< intSizePopulation; i++) {
             strResTape[i]= simulationProblem(turingMachines[i].strMT);
-            dblFitness[i] = evalTapefromTM(strTargetText, strResTape[i]);
+            dblFitness[i] = fitnessTapefromTM(strTargetText, strResTape[i]);
         }
         //sort Turing machine by dblFitness
         for ( i = 0; i < intSizePopulation; i++) {
@@ -153,7 +178,7 @@ public class Proyecto01 {
        //transform turing machine in string binary string to make the GA.
 
     }
-    public double evalTapefromTM(String strTargetText, String strTMTape){
+    public double fitnessTapefromTM(String strTargetText, String strTMTape){
         //se extrae el texto de la cinta
         strTMTape  = getStringTape(strTMTape, strTargetText);
         // idea de reforzamiento, lo que buscamos es que obtenga puntos cuando un byte esta bien.
@@ -169,6 +194,8 @@ public class Proyecto01 {
         return intCount/strTargetText.length(); 
 
     }
+
+    //simulation problem for each TM.
     public String simulationProblem(String[] strStatesTM ){
         int intState = 0;
         int i=0;
@@ -187,13 +214,52 @@ public class Proyecto01 {
     }
     /*
     *******************************************************************
+                            Kolmogorov
+    *******************************************************************
+    */
+    // - función que reduzca la maquina de turing
+    // - Contar el número de bits, regresar.
+
+    //
+    /*
+    *******************************************************************
                             Genomic Algorithm
     *******************************************************************
     */
-    public void cruzamiento(TuringClass[] turingMachines){
-        String strTM;
-        strTM = this.tmtoString(turingMachines);
+                            //dos maquinas de turing y una probabilidad
+    public  String[] crossGA(String strTMOne, String strTMTwo, double dblProbability, Random r){
+        double dblPrb = r.nextDouble();
+        System.out.println("mi random " + dblPrb +", lo que mando "+ dblProbability);
+        dblPrb = r.nextDouble();
+        System.out.println("mi random " + dblPrb +", lo que mando "+ dblProbability);
+        int intPointerCut;
+        String strCross01,strCross02;
+        int intSize = strTMOne.length();
+        intPointerCut = r.nextInt(intSize);
+        if (dblPrb>dblProbability) { //si se cruza
+            strCross01 = strTMOne.substring(intPointerCut,intSize)+strTMOne+strTMOne.substring(0,intPointerCut);
+            strCross02 = strTMTwo.substring(intPointerCut,intSize)+strTMTwo+strTMTwo.substring(0,intPointerCut);
+            strTMOne =strCross02.substring(intSize-intSize/2,intSize) + strCross01.substring(intSize,intSize+intSize/2) ;
+            strTMTwo = strCross01.substring(intSize-intSize/2,intSize) + strCross02.substring(intSize,intSize+intSize/2);
+            System.out.println(strTMOne);
+        }
+        String strRes[]= new String[2];
+        strRes[0]=strTMOne;
+        strRes[1]=strTMTwo;
+        return strRes;
 
+    }
+    public String mutationGA(String strTM, double dblMutationProb, Random r){
+        int i;
+        int intRandom;
+        Double dblTemp = strTM.length()*dblMutationProb;
+        int intLength =dblTemp.intValue();
+        char[] charText = strTM.toCharArray();
+        for (i=0; i<intLength; i++) {
+            charText[r.nextInt(intLength)] =  Character.forDigit(r.nextInt(2), 10);
+
+        }
+        return String.valueOf(charText);
     }
     /*
     *******************************************************************
