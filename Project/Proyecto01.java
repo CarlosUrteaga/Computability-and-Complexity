@@ -176,6 +176,11 @@ public class Proyecto01 {
             }
         }
        //transform turing machine in string binary string to make the GA.
+        //Cross will be inside of for with length of intSizePopulation/2
+        //crossGA(String strTMOne, String strTMTwo, double dblProbability, Random r)
+        //mutation is the all picture of the turing machine i.e. strTM Problem
+        //mutationGA(String strTM, double dblMutationProb, Random r)
+
 
     }
     public double fitnessTapefromTM(String strTargetText, String strTMTape){
