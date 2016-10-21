@@ -1,6 +1,6 @@
 # Computability and Complexity
 ## 2016
-Teacher: Angel Kuri
+Profesor: Dr. Angel Kuri
+Subject: Computability and Complexity
 
-Computability and Complexity
 
