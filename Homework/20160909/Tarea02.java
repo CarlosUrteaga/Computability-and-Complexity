@@ -39,7 +39,6 @@ public class Tarea02 {
 		double fltPromedio=0;
 		i=0;
 
-		PrintWriter writer = new PrintWriter("file.txt", "UTF-8");
 		while(i < N){
 			arreXu[i]=fltTeorema(N, O);
 			fltPromedio+=arreXu[i];
