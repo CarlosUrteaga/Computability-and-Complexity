@@ -73,3 +73,4 @@ pu	blic  String[] crossGA(String strTMOne, String strTMTwo, double 	dblProbabili
 public static class TuringClass //clase auxiliar para el manejo de cadenas de caracteres.
 ```
 #Repositiorio del programa
+https://github.com/CarlosUrteaga/Computability-and-Complexity/tree/master/Project
