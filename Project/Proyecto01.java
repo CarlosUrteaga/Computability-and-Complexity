@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class Proyecto01 {
     public static final int NUMBEROFSTATES = 64;
-
+    public static final int INTSIZE  = 1024;
     public static int intTransition;
     public static int intSizePopulation;
     public static int intGeneration;
@@ -19,7 +19,7 @@ public class Proyecto01 {
 
         int intGeneration;
         String strTest;
-        String strStB;
+        String strTargetText;
         String strText;
         String input;
         String[] strMT;
@@ -29,7 +29,7 @@ public class Proyecto01 {
         // Ask for configuration
         //System.out.println("Dame la raíz del generador de números aleatorios:");
         //intSeed = Integer.parseInt(System.console().readLine());
-        intSeed = 1234;
+        intSeed = 20161019;
         //System.out.println("Deme el nombre del archivo que desee procesar:");
         //input = System.console().readLine();
         input = "12345.txt";
@@ -55,9 +55,10 @@ public class Proyecto01 {
         System.out.print("6) Factor de Ponderación:\t");        
         dblPonderation = Double.parseDouble(System.console().readLine());
         */
-        intSizePopulation =50;
-        intTransition = 50; //cuando cambias de estado, cuando l
-        intSizeTape = 10000;
+        intSizePopulation =5;
+        
+        intTransition = 10000; //cuando cambias de estado, cuando l
+        intSizeTape = 100;
         dblMutationProb = 0.01;
         dblPonderation = 0;
         Proyecto01 tst = new Proyecto01();
@@ -67,17 +68,76 @@ public class Proyecto01 {
         r.setSeed(intSeed );
 
         int j;
-        /*
-        //genera n maquinas de turing
+        
+        //Generate Random  TM
+        String strCintaN="";
+
+        //inicia cinta en blanco
+        strCinta = tst.setTape(intSizeTape);
+        //convierte Texto en binario
+        strTargetText = tst.strToBin(strText);
+        //Modifica la cinta
+        strCinta = tst.modTape(strCinta, strTargetText);
+        //System.out.println(tst.fitnessTapefromTM(strStB,strCintaN));
+        //
+        //tst.projectProblem(turingMachines, strTargetText);
+
+
+        String strResTape[] = new  String [intSizePopulation];
+        double dblFitness[] = new double[intSizePopulation];
+
         for (j = 0; j< intSizePopulation; j++) {
             turingMachines[j] = new TuringClass();
             turingMachines[j].strMT =  new String[NUMBEROFSTATES];
             turingMachines[j].strMT = tst.tmSetStates( turingMachines[j].strMT, r);
+            /*
+            strResTape[j]= tst.simulationProblemMT(turingMachines[j].strMT);
+            dblFitness[j] = tst.fitnessTapefromTM(strTargetText, strResTape[j]);
+            System.out.println(dblFitness[j]);*/
         }
-        for (i=0; i<64; i++) {
-            System.out.println(turingMachines[0].strMT[i]);
+        /*
+        System.out.println("====");
+        double tmp;
+        TuringClass turingTemp;
+        // ordenación
+        for ( i = 0; i < intSizePopulation; i++) {
+            for (j = i + 1; j < intSizePopulation; j++) {
+                tmp = 0;
+                turingTemp = new TuringClass();
+                if (dblFitness[i] < dblFitness[j]) {
+
+                    tmp = dblFitness[i];
+                    dblFitness[i] = dblFitness[j];
+                    dblFitness[j] = tmp;
+
+                    turingTemp  = turingMachines[i];
+                    turingMachines[i] = turingMachines[j];
+                    turingMachines[j] = turingTemp;
+                }
+            }
         }
 
+        for (j = 0; j< intSizePopulation; j++) {
+            System.out.println(dblFitness[j]); 
+        }
+*/
+
+        tst.projectProblem(turingMachines,strTargetText, r);
+        //projectProblem(TuringClass[] turingMachines, String strTargetText){
+
+        
+
+
+
+        //String arreRes[] = new String[3];
+        //arreRes = tst.simulationTM(turingMachines[0].strMT, strTest, 0, strCinta.length()/2);
+
+        //projectProblem(TuringClass[] turingMachines, String strTargetText){
+        /*
+        arreRes[0]=""+ intNextState;
+        arreRes[1]=""+ intPointerTape;
+        arreRes[2]=strCinta;
+        
         strMT = new String[64];
         strMT = turingMachines[0].strMT;
         System.out.println("=======");
@@ -148,45 +208,105 @@ public class Proyecto01 {
         Proyecto
             generar varias MT y evaluar,
     */
-    public void projectProblem(TuringClass[] turingMachines, String strTargetText){
+    public TuringClass[]  projectProblem(TuringClass[] turingMachines, String strTargetText, Random r){
 
         int i;
         int j;
+        double tmp;
+        TuringClass turingTemp;
+        // Supongo que ya inicie las TM  
         String strResTape[] = new  String [intSizePopulation];
         double dblFitness[] = new double[intSizePopulation];
+        String strTM[] = new String[intSizePopulation];
+        //simulation
+
         for (i=0; i< intSizePopulation; i++) {
-            strResTape[i]= simulationProblem(turingMachines[i].strMT);
+            strResTape[i]= simulationProblemMT(turingMachines[i].strMT);
             dblFitness[i] = fitnessTapefromTM(strTargetText, strResTape[i]);
         }
-        //sort Turing machine by dblFitness
+        //ordenación
+
+        //concatenar con el abuelo
         for ( i = 0; i < intSizePopulation; i++) {
             for (j = i + 1; j < intSizePopulation; j++) {
-                double tmp = 0;
-                TuringClass turingTemp = new TuringClass();
-                if (dblFitness[i] > dblFitness[j]) {
+                tmp = 0;
+                turingTemp = new TuringClass();
+                if (dblFitness[i] < dblFitness[j]) {
 
                     tmp = dblFitness[i];
                     dblFitness[i] = dblFitness[j];
                     dblFitness[j] = tmp;
-            
+
                     turingTemp  = turingMachines[i];
                     turingMachines[i] = turingMachines[j];
                     turingMachines[j] = turingTemp;
                 }
             }
         }
-       //transform turing machine in string binary string to make the GA.
-        //Cross will be inside of for with length of intSizePopulation/2
-        //crossGA(String strTMOne, String strTMTwo, double dblProbability, Random r)
-        //mutation is the all picture of the turing machine i.e. strTM Problem
-        //mutationGA(String strTM, double dblMutationProb, Random r)
+        //Seleccionar top 
+        //GA
+        //MT to String
+        for ( i = 0; i < intSizePopulation; i++) {
+            strTM[i] = tmtoString(turingMachines[i].strMT);
+        }
+        strTM = simulationGA(strTM,r);
+        //string to MT 
+        for ( i = 0; i < intSizePopulation; i++) {
+            turingMachines[i].strMT = stringToTM(strTM[i]);
+        }
 
-
+        return turingMachines;
     }
+    /*
+
+        String strTM[] = new String[intSizePopulation];
+        for ( i = 0; i < intSizePopulation; i++) {
+            strTM[i] = tmtoString(turingMachines[i]);
+        }
+
+    public String[] stringToTM(String strResTM){
+        String[] strTM = new String[NUMBEROFSTATES];
+        int  i;
+        for (i=0; i<NUMBEROFSTATES; i++) {
+            strTM[i] = strResTM.substring(16*i,16*(i+1));
+        }
+        return strTM;
+    }
+    */
+    public String[] simulationGA(String [] strTMs, Random r){
+        int i;
+        int intTMSize;
+        intTMSize = strTMs[0].length();
+
+         // Convert TM to String to cross and mutate
+        String strRes[]= new String[2];
+        String strTM;
+        double dblCrossProb = .1;
+        double dblMutationProb = 0.01;
+        for (i=0; i<intSizePopulation/2; i ++ ) {
+            strRes = crossGA(strTMs[i], strTMs[intSizePopulation-1], dblCrossProb, r);
+            strTMs[i] = strRes[0];
+            strTMs[intSizePopulation-1] = strRes[1];
+        }
+        strTM = "";
+        //TMs to str debería de ser 1024 * tamaño de la población
+        for ( i = 0; i < intSizePopulation; i++) {
+            strTM =strTM +  strTMs[i];
+        }
+        strTM = mutationGA(strTM, dblMutationProb, r);
+
+        for (i=0; i<intSizePopulation; i++) {
+            strTMs[i] = strTM.substring(intTMSize*i,intTMSize*(i+1));
+        }
+        return strTMs;
+    }
+
     public double fitnessTapefromTM(String strTargetText, String strTMTape){
         //se extrae el texto de la cinta
+
         strTMTape  = getStringTape(strTMTape, strTargetText);
         // idea de reforzamiento, lo que buscamos es que obtenga puntos cuando un byte esta bien.
+
         char[] charTape = strTMTape.toCharArray();
         char[] charText = strTargetText.toCharArray();
         int i =0;
@@ -195,20 +315,22 @@ public class Proyecto01 {
             if (charTape[i]==charText[i]) {
                 intCount++;
             }
+            i++;
         }
         return intCount/strTargetText.length(); 
 
     }
 
     //simulation problem for each TM.
-    public String simulationProblem(String[] strStatesTM ){
+    public String simulationProblemMT(String[] strStatesTM ){
         int intState = 0;
         int i=0;
         String strCintaT;
         int intPointerTape = intSizeTape/2;
         String strArreRes[] = new String[2];
         strCintaT = this.setTape(intSizeTape);
-        while (intState!=63 && i<intTransition && (intPointerTape < intSizeTape || intPointerTape>0)){
+        while (intState!=63 && i<intTransition && (intPointerTape < intSizeTape && intPointerTape>0)){
+
             strArreRes = simulationTM(strStatesTM, strCintaT, intState, intPointerTape);
             intState = Integer.parseInt(strArreRes[0]);
             intPointerTape = Integer.parseInt(strArreRes[1]);
@@ -221,9 +343,10 @@ public class Proyecto01 {
     *******************************************************************
                             Kolmogorov
     *******************************************************************
+
     */
     // - función que reduzca la maquina de turing
-    // - Contar el número de bits, regresar.
+    // - Contar el número de bits, regresar. #edos*16 bits
 
     //
     /*
@@ -234,9 +357,6 @@ public class Proyecto01 {
                             //dos maquinas de turing y una probabilidad
     public  String[] crossGA(String strTMOne, String strTMTwo, double dblProbability, Random r){
         double dblPrb = r.nextDouble();
-        System.out.println("mi random " + dblPrb +", lo que mando "+ dblProbability);
-        dblPrb = r.nextDouble();
-        System.out.println("mi random " + dblPrb +", lo que mando "+ dblProbability);
         int intPointerCut;
         String strCross01,strCross02;
         int intSize = strTMOne.length();
@@ -246,7 +366,7 @@ public class Proyecto01 {
             strCross02 = strTMTwo.substring(intPointerCut,intSize)+strTMTwo+strTMTwo.substring(0,intPointerCut);
             strTMOne =strCross02.substring(intSize-intSize/2,intSize) + strCross01.substring(intSize,intSize+intSize/2) ;
             strTMTwo = strCross01.substring(intSize-intSize/2,intSize) + strCross02.substring(intSize,intSize+intSize/2);
-            System.out.println(strTMOne);
+
         }
         String strRes[]= new String[2];
         strRes[0]=strTMOne;
@@ -254,12 +374,12 @@ public class Proyecto01 {
         return strRes;
 
     }
-    public String mutationGA(String strTM, double dblMutationProb, Random r){
+    public String mutationGA(String strTMs, double dblMutationProb, Random r){
         int i;
         int intRandom;
-        Double dblTemp = strTM.length()*dblMutationProb;
+        Double dblTemp = strTMs.length()*dblMutationProb;
         int intLength =dblTemp.intValue();
-        char[] charText = strTM.toCharArray();
+        char[] charText = strTMs.toCharArray();
         for (i=0; i<intLength; i++) {
             charText[r.nextInt(intLength)] =  Character.forDigit(r.nextInt(2), 10);
 
@@ -308,30 +428,80 @@ public class Proyecto01 {
    
     public String[] simulationTM(String[] strStatesTM, String strCinta, int intState,  int intPointerTape){
         //get bit
-        int tapeBit = strCinta.charAt(intPointerTape)- '0';//strCinta[intPointerTape];
+        char tapeBit = strCinta.charAt(intPointerTape);//strCinta[intPointerTape];
 
         String strState;
         int intNextState;
-        String strWriteTape;
         String strLR;
-        if (tapeBit==1) { //0 false,1 true
+        if (tapeBit=='1') { //0 false,1 true
             strState = strStatesTM[intState].substring(8,16);
         }else{
             strState = strStatesTM[intState].substring(0,8);
         }
         intNextState = Integer.parseInt(strState.substring(0,6),2);
-        strWriteTape = ""+strState.charAt(6);
+
+        char[] charText = strCinta.toCharArray();
+        charText[intPointerTape] = strState.charAt(6);
+        strCinta = String.valueOf(charText);
         strLR = strState.charAt(7)+"";
          if (strLR.equals("1")) { //0 left,1 right
             intPointerTape++;
         }else{
             intPointerTape--;
-        }
+        }/*
+
+        System.out.println("bit de cinta " + tapeBit);
+        System.out.println("que escribo " + strState.charAt(6));
+        System.out.println(" siguiente estado "+ intNextState);
+        System.out.println("strLR " + strLR);*/
         String arreRes[] = new String[3];
         arreRes[0]=""+ intNextState;
         arreRes[1]=""+ intPointerTape;
         arreRes[2]=strCinta;
         return arreRes; //next state
+    }
+    public String strTMState(String[] strTMStates, int intState){
+        String strState0;
+        String strState1;
+        strState0 = strTMStates[intState].substring(0,8);
+        strState1 = strTMStates[intState].substring(8,16);
+        
+        int intNextState0 = Integer.parseInt(strState0.substring(0,6),2);
+        int intNextState1 = Integer.parseInt(strState1.substring(0,6),2);
+
+        String strWriteTape0 = ""+strState0.charAt(6);
+        String strWriteTape1 = ""+strState1.charAt(6);
+
+        
+        String strLR0 = strState0.charAt(7)+"";;
+        String strLR1 = strState1.charAt(7)+"";;
+        if (strLR0.equals("0")) { //0 left,1 right
+            strLR0 = "L";
+         }else{
+            strLR0 = "R";
+         }
+         if (strLR1.equals("0")) { //0 left,1 right
+            strLR1 = "L";
+         }else{
+            strLR1 = "R";
+         }
+         String strintState="";
+         String strNextState0="";
+         String strNextState1="";
+         if (intState<10) {
+             strintState="0";
+         }
+         strintState = strintState+intState;
+         if (intNextState0<10)
+            strNextState0="0";
+        strNextState0=strNextState0+intNextState0;
+         if (intNextState1<10)
+            strNextState1="0";
+        strNextState1=strNextState1+intNextState1;
+         
+        // edo, escribe, movimiento, siguiente estado,  salida, movmiento SE
+        return  ""+strintState+"|  "+ strWriteTape0 +"|  "+ strLR0 +"|  "+ strNextState0 +"||"+ strWriteTape1 +"|  "+ strLR1 +"|  "+ strNextState1 ;
+        
     }
 
     /*
